@@ -1,0 +1,83 @@
+<ngx-slick-carousel
+  class="carousel"
+  #slickModal="slick-carousel"
+  [config]="slideConfig"
+>
+  <div
+    ngxSlickItem
+    (click)="viewHotelDetails(hotel)"
+    *ngFor="let hotel of cards"
+    class="card"
+  >
+    <img src="{{ baseUrl + hotel.image.imagePath }}" alt="{{ hotel.title }}" />
+    <div class="hotel-info">
+      <div class="title-rating-flex">
+        <div class="title">{{ hotel.title }}</div>
+        <div class="rating">
+          <svg
+            *ngFor="let _ of [].constructor(hotel.starRating); let i = index"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            class=""
+            style="width: 1rem; height: 1rem"
+          >
+            <path
+              d="M7.925 8.03a1.05 1.05 0 00.793-.591l2.576-5.478a.771.771 0 011.412 0l2.576 5.478a1.048 1.048 0 00.793.59l5.75.87a.835.835 0 01.437 1.407l-4.188 4.274a1.05 1.05 0 00-.287.905l.99 6.05a.795.795 0 01-1.141.869l-5.13-2.83a1.05 1.05 0 00-1.013 0l-5.13 2.83a.795.795 0 01-1.141-.87l.995-6.05a1.05 1.05 0 00-.286-.904l-4.192-4.273A.834.834 0 012.175 8.9z"
+            ></path>
+          </svg>
+        </div>
+      </div>
+      <div class="distance">{{ hotel.distance }} miles from city centre</div>
+      <div class="reviews">
+        <span class="review-points">{{ hotel.guestRating.toFixed(1) }}</span>
+        <span class="review-count">{{ hotel.reviewCount }} reviews</span>
+      </div>
+    </div>
+    <mat-divider [vertical]="true" class="price-divider"></mat-divider>
+    <div class="hotel-price-container">
+      <div class="hotel-price-container-center">
+        <div class="hotel-price">
+          <span class="price">${{ hotel.startingPrice }}</span>
+          <span class="night">night</span>
+          <span class="anight">a night</span>
+        </div>
+        <div class="free-cancellation" *ngIf="hotel.hasFreeCancellation">
+          Free cancellation
+        </div>
+        <div class="free-cancellation" *ngIf="hotel.hasPayOnArrival">
+          Free on arrival
+        </div>
+      </div>
+    </div>
+  </div>
+</ngx-slick-carousel>
+
+<div class="slider-controls">
+  <button (click)="prev()">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      style="width: 1.5rem; height: 1.5rem"
+      class="BpkIcon_bpk-icon--rtl-support__OTJmO"
+    >
+      <path
+        d="M16.207 4.299a1 1 0 010 1.414l-6.293 6.293 6.293 6.293a1 1 0 01-1.414 1.414l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 0z"
+      ></path>
+    </svg>
+  </button>
+  <button (click)="next()">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      style="width: 1.5rem; height: 1.5rem"
+      class="BpkIcon_bpk-icon--rtl-support__OTJmO"
+    >
+      <path
+        d="M7.8 4.287a1 1 0 000 1.414l6.292 6.293L7.8 18.287a1 1 0 001.39 1.438l.024-.024 7-7a1 1 0 000-1.414l-7-7a1 1 0 00-1.414 0z"
+      ></path>
+    </svg>
+  </button>
+</div>

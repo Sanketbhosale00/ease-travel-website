@@ -1,0 +1,180 @@
+section {
+  background-color: #f1f5f9;
+}
+.center {
+  padding-top: 1.5rem;
+  width: 90vw;
+  max-width: 1224px;
+  margin: 0 auto;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* hotel summary */
+
+.hotel {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.dates {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.check-in-check-out,
+.total-nights {
+  background-color: #002e5d;
+  color: white;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.25rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.main-info {
+  display: flex;
+  gap: 1rem;
+}
+
+img {
+  border-radius: 0.25rem;
+  height: 100px;
+  width: 200px;
+  object-fit: cover;
+}
+
+.summary svg {
+  vertical-align: top;
+}
+
+.hotel-name {
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+.room-name,
+.guest-info {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+/* price info */
+
+.price-info {
+  border-radius: 0.5rem;
+  background-color: white;
+  margin-top: 1rem;
+  font-weight: 500;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.main-cost {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.additional-cost {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.total {
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* details form */
+
+.details-form {
+  border-radius: 0.5rem;
+  background-color: white;
+  margin-bottom: 1.5rem;
+}
+
+.header {
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding: 1.5rem 0 0.5rem 1rem;
+}
+
+.form {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+mat-form-field {
+  width: 100%;
+  --mat-form-field-container-vertical-padding: 0px;
+  --mat-form-field-container-height: 48px;
+}
+
+mat-form-field input {
+  margin-top: 1rem;
+  align-items: center;
+}
+
+.invalid-input-error-container {
+  text-align: start;
+  color: red;
+  width: 100%;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+/* continue to payment */
+
+button {
+  width: 100%;
+  color: white !important;
+  --mdc-filled-button-container-color: #002e5d !important;
+}
+
+.reserve-btn-large-screen {
+  display: none;
+}
+
+.fill {
+  height: 100vh;
+}
+
+@media screen and (min-width: 800px) {
+  .first {
+    width: 50%;
+  }
+  .second {
+    width: 50%;
+  }
+  .center {
+    flex-direction: row-reverse;
+    gap: 2rem;
+  }
+  .reserve-btn {
+    display: none;
+  }
+  .reserve-btn-large-screen {
+    margin-top: 1rem;
+    display: block;
+    width: 100%;
+  }
+  .main-info {
+    flex-direction: column;
+  }
+  img {
+    height: 100px;
+    width: 100%;
+    display: block;
+  }
+}

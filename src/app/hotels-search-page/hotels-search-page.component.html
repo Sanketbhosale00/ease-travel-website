@@ -1,0 +1,350 @@
+<section class="hotels-search-content">
+  <app-search-bar></app-search-bar>
+  <div class="center">
+    <!-- small screen filters -->
+    <div class="top-filter-panel">
+      <div class="active-mobile-filters-count"></div>
+      <!-- sort by mobile filter -->
+      <button
+        class="sort-by-btn"
+        mat-flat-button
+        color="primary"
+        (click)="openSortByFilterBottomSheet()"
+      >
+        Sort By
+      </button>
+      <!-- small screen price filter -->
+      <button
+        class="{{
+          isPriceFilterActive ? 'filter-active' : ''
+        }} price-filter-btn"
+        mat-flat-button
+        color="primary"
+        (click)="openPriceFilterBottomSheet()"
+      >
+        <span
+          class="price-active"
+          *ngIf="isPriceFilterActive && !isLargeScreen"
+        >
+          ${{ minPrice }} - ${{ maxPrice === infinity ? "350+" : maxPrice }}
+        </span>
+        <span *ngIf="!isPriceFilterActive">Price</span>
+      </button>
+      <!-- small screen star rating filter-->
+      <button
+        class="{{
+          isStarRatingFilterActive ? 'filter-active' : ''
+        }} star-rating-filter-btn"
+        mat-flat-button
+        color="primary"
+        (click)="openStarRatingFilterBottomSheet()"
+      >
+        <span
+          class="star-rating-active"
+          *ngIf="isStarRatingFilterActive && !isLargeScreen"
+        >
+          <span *ngFor="let rating of activeStars" class="star-rating-active">
+            {{ rating }}
+          </span>
+          stars
+        </span>
+        <span *ngIf="!isStarRatingFilterActive">Stars</span>
+      </button>
+      <!-- small screen guest rating filter-->
+      <button
+        class="{{
+          isGuestRatingFilterActive ? 'filter-active' : ''
+        }} guest-rating-filter-btn"
+        mat-flat-button
+        color="primary"
+        (click)="openGuestRatingFilterBottomSheet()"
+      >
+        <span
+          class="price-active"
+          *ngIf="isGuestRatingFilterActive && !isLargeScreen"
+        >
+          {{ minGuestRating }}+
+        </span>
+        <span *ngIf="!isGuestRatingFilterActive">Guest Rating</span>
+      </button>
+      <!-- small screen booking options-->
+      <button
+        class="{{
+          isCancellationFree || isPayOnArrival ? 'filter-active' : ''
+        }} booking-options-filter-btn"
+        mat-flat-button
+        color="primary"
+        (click)="openBookingOptionsFilterBottomSheet()"
+      >
+        <span> Booking options </span>
+      </button>
+    </div>
+    <div class="grid">
+      <!-- side filters  -->
+      <div class="side-filters-panel">
+        <!-- booking options filter -->
+        <section class="filter booking-filter-container">
+          <div class="filter-title">Booking options</div>
+          <div>
+            <mat-checkbox
+              color="primary"
+              [(ngModel)]="isCancellationFree"
+              (change)="filterHotels()"
+            >
+              <span class="booking-option-label"> Free cancellation </span>
+            </mat-checkbox>
+            <mat-checkbox
+              color="primary"
+              [(ngModel)]="isPayOnArrival"
+              (change)="filterHotels()"
+            >
+              <span class="booking-option-label"> Pay on arrival </span>
+            </mat-checkbox>
+          </div>
+        </section>
+        <!-- price range filter -->
+        <section class="filter price-filter-container">
+          <div class="filter-title">Price</div>
+          <div *ngFor="let range of priceRanges">
+            <mat-checkbox
+              color="primary"
+              [(ngModel)]="range.checked"
+              (change)="updatePriceRange(); filterHotels()"
+            >
+              <span class="price-filter-label">
+                {{ range.label }}
+              </span>
+            </mat-checkbox>
+          </div>
+        </section>
+        <!-- star rating filter -->
+        <section class="filter rating-filter-container">
+          <div class="filter-title">Star Rating</div>
+          <div *ngFor="let range of ratingRanges">
+            <mat-checkbox
+              class="star-rating-checkbox"
+              color="primary"
+              [(ngModel)]="range.checked"
+              (change)="updateStarRating(); filterHotels()"
+            >
+              <span class="star-rating-label">{{ range.stars }} stars</span>
+
+              <span *ngFor="let _ of [].constructor(range.stars)">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  class="filter-star-icon"
+                  style="width: 1rem; height: 1rem"
+                >
+                  <path
+                    d="M7.925 8.03a1.05 1.05 0 00.793-.591l2.576-5.478a.771.771 0 011.412 0l2.576 5.478a1.048 1.048 0 00.793.59l5.75.87a.835.835 0 01.437 1.407l-4.188 4.274a1.05 1.05 0 00-.287.905l.99 6.05a.795.795 0 01-1.141.869l-5.13-2.83a1.05 1.05 0 00-1.013 0l-5.13 2.83a.795.795 0 01-1.141-.87l.995-6.05a1.05 1.05 0 00-.286-.904l-4.192-4.273A.834.834 0 012.175 8.9z"
+                  ></path>
+                </svg>
+              </span>
+            </mat-checkbox>
+          </div>
+        </section>
+        <!-- guest rating filter -->
+        <section class="filter guest-rating-filter-container">
+          <div class="filter-title">Guest rating</div>
+          <div *ngFor="let range of guestRatingRanges">
+            <mat-checkbox
+              color="primary"
+              [(ngModel)]="range.checked"
+              (change)="updateGuestRating(); filterHotels()"
+            >
+              <span class="guest-rating-label">
+                {{ range.label }}
+              </span>
+              <span>
+                {{ range.extra }}
+              </span>
+            </mat-checkbox>
+          </div>
+        </section>
+      </div>
+      <div class="hotel-result-grid">
+        <!-- large screen active filters -->
+        <div class="active-top-filters-large-screen">
+          <!-- active price range -->
+          <button
+            *ngIf="isPriceFilterActive && isLargeScreen"
+            class="filter-active filter-active-large-screen"
+            mat-flat-button
+            color="primary"
+            (click)="clearPriceFilter(); filterHotels()"
+          >
+            <span class="price-active">
+              ${{ minPrice }} - ${{ maxPrice === infinity ? "350+" : maxPrice }}
+            </span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              class="clear-filter-svg"
+              style="width: 1rem; height: 1rem"
+            >
+              <path
+                d="M12 22.5A10.5 10.5 0 101.5 12 10.5 10.5 0 0012 22.5zM7.938 7.94h.002a1.5 1.5 0 012.12 0L12 9.878l1.94-1.94a1.5 1.5 0 012.12 2.122L14.122 12l1.94 1.94a1.5 1.5 0 01-2.122 2.12L12 14.122l-1.94 1.94a1.5 1.5 0 01-2.12-2.122L9.878 12l-1.94-1.94a1.5 1.5 0 010-2.12z"
+              ></path>
+            </svg>
+          </button>
+          <!-- active star rating range -->
+          <button
+            *ngIf="isStarRatingFilterActive && isLargeScreen"
+            class="filter-active filter-active-large-screen"
+            mat-flat-button
+            color="primary"
+            (click)="clearStarRatingFilter(); filterHotels()"
+          >
+            <span *ngFor="let rating of activeStars" class="star-rating-active">
+              {{ rating }}
+            </span>
+            stars
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              class="clear-filter-svg"
+              style="width: 1rem; height: 1rem"
+            >
+              <path
+                d="M12 22.5A10.5 10.5 0 101.5 12 10.5 10.5 0 0012 22.5zM7.938 7.94h.002a1.5 1.5 0 012.12 0L12 9.878l1.94-1.94a1.5 1.5 0 012.12 2.122L14.122 12l1.94 1.94a1.5 1.5 0 01-2.122 2.12L12 14.122l-1.94 1.94a1.5 1.5 0 01-2.12-2.122L9.878 12l-1.94-1.94a1.5 1.5 0 010-2.12z"
+              ></path>
+            </svg>
+          </button>
+          <!-- active free cancellation  -->
+          <button
+            *ngIf="isCancellationFree && isLargeScreen"
+            class="filter-active filter-active-large-screen"
+            mat-flat-button
+            color="primary"
+            (click)="clearFreeCancellationFilter(); filterHotels()"
+          >
+            <span class="free-cancellation-active">Free cancellation </span>
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              class="clear-filter-svg"
+              style="width: 1rem; height: 1rem"
+            >
+              <path
+                d="M12 22.5A10.5 10.5 0 101.5 12 10.5 10.5 0 0012 22.5zM7.938 7.94h.002a1.5 1.5 0 012.12 0L12 9.878l1.94-1.94a1.5 1.5 0 012.12 2.122L14.122 12l1.94 1.94a1.5 1.5 0 01-2.122 2.12L12 14.122l-1.94 1.94a1.5 1.5 0 01-2.12-2.122L9.878 12l-1.94-1.94a1.5 1.5 0 010-2.12z"
+              ></path>
+            </svg>
+          </button>
+          <!-- active pay on arrival-->
+          <button
+            *ngIf="isPayOnArrival && isLargeScreen"
+            class="filter-active filter-active-large-screen"
+            mat-flat-button
+            color="primary"
+            (click)="clearPayOnArrivalFilter(); filterHotels()"
+          >
+            <span class="free-cancellation-active">Pay on arrival </span>
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              class="clear-filter-svg"
+              style="width: 1rem; height: 1rem"
+            >
+              <path
+                d="M12 22.5A10.5 10.5 0 101.5 12 10.5 10.5 0 0012 22.5zM7.938 7.94h.002a1.5 1.5 0 012.12 0L12 9.878l1.94-1.94a1.5 1.5 0 012.12 2.122L14.122 12l1.94 1.94a1.5 1.5 0 01-2.122 2.12L12 14.122l-1.94 1.94a1.5 1.5 0 01-2.12-2.122L9.878 12l-1.94-1.94a1.5 1.5 0 010-2.12z"
+              ></path>
+            </svg>
+          </button>
+          <!-- active min guest rating -->
+          <button
+            *ngIf="isGuestRatingFilterActive && isLargeScreen"
+            class="filter-active filter-active-large-screen"
+            mat-flat-button
+            color="primary"
+            (click)="clearGuestRatingFilter(); filterHotels()"
+          >
+            <span class="guest-rating-active">{{ minGuestRating }}+</span>
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              class="clear-filter-svg"
+              style="width: 1rem; height: 1rem"
+            >
+              <path
+                d="M12 22.5A10.5 10.5 0 101.5 12 10.5 10.5 0 0012 22.5zM7.938 7.94h.002a1.5 1.5 0 012.12 0L12 9.878l1.94-1.94a1.5 1.5 0 012.12 2.122L14.122 12l1.94 1.94a1.5 1.5 0 01-2.122 2.12L12 14.122l-1.94 1.94a1.5 1.5 0 01-2.12-2.122L9.878 12l-1.94-1.94a1.5 1.5 0 010-2.12z"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        <!-- hotels results -->
+        <div
+          (click)="viewHotelDetails(hotel)"
+          *ngFor="let hotel of filteredHotels"
+          class="hotel-card"
+        >
+          <img src="{{ baseUrl + hotel.image }}" alt="{{ hotel.title }}" />
+          <div class="hotel-info">
+            <div class="title-rating-flex">
+              <div class="title">{{ hotel.title }}</div>
+              <div class="rating">
+                <svg
+                  *ngFor="
+                    let _ of [].constructor(hotel.starRating);
+                    let i = index
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  class=""
+                  style="width: 1rem; height: 1rem"
+                >
+                  <path
+                    d="M7.925 8.03a1.05 1.05 0 00.793-.591l2.576-5.478a.771.771 0 011.412 0l2.576 5.478a1.048 1.048 0 00.793.59l5.75.87a.835.835 0 01.437 1.407l-4.188 4.274a1.05 1.05 0 00-.287.905l.99 6.05a.795.795 0 01-1.141.869l-5.13-2.83a1.05 1.05 0 00-1.013 0l-5.13 2.83a.795.795 0 01-1.141-.87l.995-6.05a1.05 1.05 0 00-.286-.904l-4.192-4.273A.834.834 0 012.175 8.9z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+            <div class="distance">
+              {{ hotel.distance }} miles from city centre
+            </div>
+            <div class="reviews">
+              <span class="review-points">{{
+                hotel.guestRating.toFixed(1)
+              }}</span>
+              <span class="review-count">{{ hotel.reviewCount }} reviews</span>
+            </div>
+          </div>
+          <mat-divider [vertical]="true" class="price-divider"></mat-divider>
+          <div class="hotel-price-container">
+            <div class="hotel-price-container-center">
+              <div class="hotel-price">
+                <span class="price">${{ hotel.startingPrice }}</span>
+                <span class="night">night</span>
+                <span class="anight">a night</span>
+              </div>
+              <div class="free-cancellation" *ngIf="hotel.hasFreeCancellation">
+                Free cancellation
+              </div>
+              <div class="free-cancellation" *ngIf="hotel.hasPayOnArrival">
+                Free on arrival
+              </div>
+              <button
+                (click)="viewHotelDetails(hotel)"
+                mat-flat-button
+                color="primary"
+                class="view-btn"
+              >
+                See availability
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

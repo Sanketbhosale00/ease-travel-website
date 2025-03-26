@@ -1,0 +1,20 @@
+<section>
+  <div class="center">
+    <!-- header -->
+    <header>{{ header }}</header>
+    <p>{{ paragraph }}</p>
+    <!-- filters -->
+    <mat-card-actions align="start">
+      <button
+        *ngFor="let destination of destinations"
+        mat-stroked-button
+        [class.active]="destination === activeDestination"
+        (click)="setActiveCity(destination)"
+      >
+        {{ destination }}
+      </button>
+    </mat-card-actions>
+    <!-- carousel -->
+    <app-carousel [cards]="hotels"></app-carousel>
+  </div>
+</section>

@@ -1,0 +1,104 @@
+<section>
+  <app-search-bar [isOpen]="openDatePicker"></app-search-bar>
+  <div class="image-grid">
+    <img
+      class="first"
+      [src]="baseUrl + hotel?.imagePaths?.[0]"
+      alt="First Image"
+    />
+    <img
+      class="second"
+      [src]="baseUrl + hotel?.imagePaths?.[1]"
+      alt="Second Image"
+    />
+    <img
+      class="third"
+      [src]="baseUrl + hotel?.imagePaths?.[2]"
+      alt="Third Image"
+    />
+  </div>
+  <div class="center">
+    <!-- hotel info -->
+    <div class="hotel-info">
+      <div class="hotel-name">{{ hotel?.title }}</div>
+      <div class="hotel-rating">
+        <svg
+          *ngFor="let _ of [].constructor(hotel?.starRating); let i = index"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          class=""
+          style="width: 1rem; height: 1rem"
+        >
+          <path
+            d="M7.925 8.03a1.05 1.05 0 00.793-.591l2.576-5.478a.771.771 0 011.412 0l2.576 5.478a1.048 1.048 0 00.793.59l5.75.87a.835.835 0 01.437 1.407l-4.188 4.274a1.05 1.05 0 00-.287.905l.99 6.05a.795.795 0 01-1.141.869l-5.13-2.83a1.05 1.05 0 00-1.013 0l-5.13 2.83a.795.795 0 01-1.141-.87l.995-6.05a1.05 1.05 0 00-.286-.904l-4.192-4.273A.834.834 0 012.175 8.9z"
+          ></path>
+        </svg>
+      </div>
+      <div class="hotel-address">{{ hotel?.address }}</div>
+      <div class="hotel-guest-rating">
+        <span class="guest-rating">
+          {{ hotel?.guestRating.toFixed(1) }}
+        </span>
+        <span class="guest-reviews">{{ hotel?.reviewCount }} reviews</span>
+      </div>
+    </div>
+    <!-- room options   -->
+    <div class="parameter-confirmation">
+      <div class="selected-dates">
+        <div class="check-in">
+          <div>Check-in</div>
+          <div class="date">
+            {{ searchParameters?.checkInDate | date : "dd MMM yyyy" }}
+            <span class="time">from 15:00 - 23:00</span>
+          </div>
+        </div>
+        <div class="check-out">
+          <div>Check-out</div>
+          <div class="date">
+            {{ searchParameters?.checkOutDate | date : "dd MMM yyyy" }}
+            <span class="time">before 11:00</span>
+          </div>
+        </div>
+      </div>
+      <button
+        color="primary"
+        class="change-dates-btn"
+        (click)="triggerDatePicker(true)"
+        mat-flat-button
+      >
+        Change dates
+      </button>
+    </div>
+    <div class="room-option-component">
+      <div class="selected-guests-rooms">
+        <div class="available-title">Available Rooms</div>
+        <div class="nights-adults">
+          For {{ totalDaysStay }} nights,
+          {{ searchParameters?.adultsCount }} adults
+        </div>
+      </div>
+      <div class="room-options-grid">
+        <div *ngFor="let room of filteredRooms" class="room-card">
+          <div class="room-title">{{ room.title }}</div>
+          <mat-divider></mat-divider>
+          <div class="room-info">
+            <div class="room-amenities">Free wifi</div>
+            <div class="room-total-price">
+              ${{ (room.pricePerNight * totalDaysStay).toFixed(2) }}
+            </div>
+            <button
+              (click)="selectRoom(room)"
+              mat-flat-button
+              color="primary"
+              class="book-btn"
+            >
+              Book
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="fill"></div>
+</section>
